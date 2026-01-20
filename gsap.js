@@ -1,6 +1,7 @@
+
 console.clear();
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(scrollTrigger);
 
 window.addEventListener("load", () => {
   gsap
@@ -11,23 +12,23 @@ window.addEventListener("load", () => {
         end: "+=150%",
         pin: true,
         scrub: 4,
-        markers: false
-      }
+        markers: false,
+      },
     })
     .to("img", {
       scale: 2,
       z: 350,
       force3D: true,
       transformOrigin: "center center",
-      ease: "power1.inOut"
+      ease: "power1.inOut",
     })
     .to(
       ".section.hero",
       {
         scale: 1.1,
         transformOrigin: "center center",
-        ease: "power1.inOut"
+        ease: "power1.inOut",
       },
-      "<"
+      "<",
     );
 });
