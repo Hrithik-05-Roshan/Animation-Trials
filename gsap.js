@@ -1,7 +1,7 @@
 
 console.clear();
 
-gsap.registerPlugin(scrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 window.addEventListener("load", () => {
   gsap
