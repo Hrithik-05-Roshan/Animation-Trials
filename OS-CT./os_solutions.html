@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OS Class Test — Complete Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1e2630;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #f0a500;
+    --accent2: #58a6ff;
+    --green: #3fb950;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --teal: #39d353;
+    --orange: #f0a500;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.7}
+  
+  /* ── HEADER ── */
+  .page-header{background:linear-gradient(135deg,#0d1117 0%,#1a2332 50%,#0d1117 100%);border-bottom:2px solid var(--accent);padding:32px 40px;position:relative;overflow:hidden}
+  .page-header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(240,165,0,.03) 20px,rgba(240,165,0,.03) 21px)}
+  .page-header h1{font-size:26px;font-weight:700;letter-spacing:-.5px;color:#fff}
+  .page-header h1 span{color:var(--accent)}
+  .page-header p{color:var(--muted);font-size:13px;margin-top:4px;font-family:var(--mono)}
+  .badge{display:inline-block;background:rgba(240,165,0,.15);border:1px solid rgba(240,165,0,.4);color:var(--accent);font-family:var(--mono);font-size:11px;padding:2px 10px;border-radius:20px;margin-top:10px;margin-right:6px}
+
+  /* ── NAV ── */
+  .nav{display:flex;gap:4px;padding:12px 40px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap;position:sticky;top:0;z-index:100}
+  .nav a{color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:12px;padding:5px 12px;border-radius:4px;border:1px solid transparent;transition:all .2s}
+  .nav a:hover{color:var(--accent);border-color:var(--accent);background:rgba(240,165,0,.08)}
+
+  /* ── MAIN LAYOUT ── */
+  .container{max-width:1100px;margin:0 auto;padding:30px 40px}
+
+  /* ── SECTION HEADERS ── */
+  .section-header{display:flex;align-items:center;gap:14px;margin:40px 0 24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+  .section-header .num{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:14px;flex-shrink:0}
+  .th .num{background:rgba(88,166,255,.15);border:1px solid rgba(88,166,255,.4);color:var(--accent2)}
+  .nu .num{background:rgba(240,165,0,.15);border:1px solid rgba(240,165,0,.4);color:var(--accent)}
+  .section-header h2{font-size:18px;font-weight:700;letter-spacing:-.3px}
+  .section-header .sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+
+  /* ── Q BLOCKS ── */
+  .q-block{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden}
+  .q-title{background:var(--surface2);padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+  .q-tag{background:rgba(88,166,255,.15);border:1px solid rgba(88,166,255,.3);color:var(--accent2);font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600}
+  .q-tag.num{background:rgba(240,165,0,.15);border-color:rgba(240,165,0,.3);color:var(--accent)}
+  .q-title span{font-weight:600;font-size:14px}
+  .q-body{padding:18px}
+
+  /* ── DEFINITION BOX ── */
+  .def{background:rgba(88,166,255,.06);border-left:3px solid var(--accent2);border-radius:0 6px 6px 0;padding:12px 16px;margin:10px 0;font-size:13px}
+  .def strong{color:var(--accent2)}
+
+  /* ── BULLETS ── */
+  .ul{list-style:none;padding:0;margin:8px 0}
+  .ul li{padding:4px 0 4px 18px;position:relative;font-size:13px}
+  .ul li::before{content:'▸';position:absolute;left:0;color:var(--accent);font-size:11px;top:5px}
+  .ul.green li::before{color:var(--green)}
+  .ul.purple li::before{color:var(--purple)}
+
+  /* ── SUB HEADING ── */
+  .sh{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;display:flex;align-items:center;gap:8px}
+  .sh::after{content:'';flex:1;height:1px;background:var(--border)}
+  .sh2{color:var(--accent2)}
+  .sh.sh2::after{background:var(--border)}
+
+  /* ── ANSWER BOX ── */
+  .answer-box{background:rgba(63,185,80,.07);border:1px solid rgba(63,185,80,.3);border-radius:8px;padding:14px 16px;margin-top:12px}
+  .answer-box .label{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:600;margin-bottom:6px}
+
+  /* ── FORMULA BOX ── */
+  .formula-box{background:rgba(188,140,255,.07);border:1px solid rgba(188,140,255,.3);border-radius:8px;padding:12px 16px;margin:10px 0;font-family:var(--mono);font-size:13px;color:var(--purple)}
+
+  /* ── TABLES ── */
+  .tbl-wrap{overflow-x:auto;margin:12px 0;border-radius:8px;border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse}
+  th{background:var(--surface2);padding:10px 14px;text-align:center;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border)}
+  td{padding:9px 14px;text-align:center;font-family:var(--mono);font-size:13px;border-bottom:1px solid rgba(48,54,61,.5)}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(255,255,255,.02)}
+  .td-proc{color:var(--accent2);font-weight:600}
+  .td-hi{color:var(--green);font-weight:600}
+  .td-wt{color:var(--orange)}
+  .td-tat{color:var(--accent2)}
+  .avg-row td{background:rgba(63,185,80,.06);color:var(--green);font-weight:600;border-top:1px solid rgba(63,185,80,.3)}
+
+  /* ── GANTT CHART ── */
+  .gantt-container{margin:16px 0;overflow-x:auto;padding-bottom:4px}
+  .gantt-title{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+  .gantt{display:flex;height:40px;border-radius:6px;overflow:hidden;border:1px solid var(--border);min-width:fit-content}
+  .gantt-block{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:600;min-width:28px;flex-shrink:0;position:relative}
+  .gantt-labels{display:flex;margin-top:4px;min-width:fit-content}
+  .gantt-label{font-family:var(--mono);font-size:10px;color:var(--muted);flex-shrink:0;text-align:left;margin-left:-3px}
+  .gp1{background:#1a4a6e;color:#58a6ff}
+  .gp2{background:#1a4a2e;color:#3fb950}
+  .gp3{background:#4a2a1a;color:#ffa657}
+  .gp4{background:#3a1a4a;color:#bc8cff}
+  .gp5{background:#4a1a1a;color:#f85149}
+  .gp6{background:#1a3a4a;color:#39d353}
+  .gcs{background:#1e1e1e;color:#555;font-size:10px;border-left:1px dashed #333;border-right:1px dashed #333}
+  .gidle{background:#111;color:#444;font-size:10px}
+
+  /* ── NOTE ── */
+  .note{background:rgba(248,81,73,.07);border:1px solid rgba(248,81,73,.25);border-radius:6px;padding:10px 14px;margin:10px 0;font-size:12px;color:#f85149}
+  .note-blue{background:rgba(88,166,255,.07);border-color:rgba(88,166,255,.25);color:var(--accent2)}
+  .note strong{font-weight:700}
+
+  /* ── FINAL ANSWER ── */
+  .final{background:rgba(240,165,0,.08);border:1.5px solid var(--accent);border-radius:8px;padding:14px 18px;margin-top:16px}
+  .final .label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px;font-weight:700}
+  .final-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+  .final-item{background:rgba(0,0,0,.2);border-radius:6px;padding:10px 14px}
+  .final-item .fi-label{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:4px}
+  .final-item .fi-val{font-size:18px;font-weight:700;color:var(--accent);font-family:var(--mono)}
+
+  /* ── MISC ── */
+  .divider{height:1px;background:var(--border);margin:16px 0}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 0}
+  @media(max-width:700px){.two-col{grid-template-columns:1fr}.container{padding:20px 16px}.nav{padding:10px 16px}}
+  .tag-inline{background:rgba(240,165,0,.15);color:var(--accent);font-family:var(--mono);font-size:11px;padding:1px 8px;border-radius:3px;font-weight:600}
+  .io-timeline{margin:12px 0}
+  .io-row{display:flex;align-items:center;gap:8px;margin:4px 0;font-family:var(--mono);font-size:12px}
+  .io-proc{width:24px;text-align:center;font-weight:700;color:var(--accent2)}
+  .io-seg{height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:11px;font-weight:600;min-width:40px}
+  .io-seg.io{background:rgba(188,140,255,.2);border:1px solid rgba(188,140,255,.4);color:var(--purple)}
+  .io-seg.cpu{background:rgba(63,185,80,.2);border:1px solid rgba(63,185,80,.4);color:var(--green)}
+  .io-seg.idle{background:rgba(100,100,100,.1);border:1px dashed #444;color:#555}
+  .info-bar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .info-chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px 12px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .info-chip span{color:var(--text);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Operating Systems — <span>Class Test Complete Solutions</span></h1>
+  <p>B.Tech CSE · 4th Semester · Theory + Numerical (FCFS, SRTF, SJF, Round Robin)</p>
+  <div>
+    <span class="badge">8 Theory Qs</span>
+    <span class="badge">4 Numerical Qs</span>
+    <span class="badge">FCFS · SRTF · SJF · RR</span>
+    <span class="badge">Exam-Ready Format</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="#theory">Theory Q1–Q8</a>
+  <a href="#q1">Num Q1 — FCFS</a>
+  <a href="#q2">Num Q2 — SRTF/SJF</a>
+  <a href="#q3">Num Q3 — Round Robin</a>
+  <a href="#q4">Num Q4 — SRTF+I/O</a>
+</nav>
+
+<div class="container">
+
+<!-- ════════════════════════════════════════════
+     THEORY QUESTIONS
+════════════════════════════════════════════ -->
+<div class="section-header th" id="theory">
+  <div class="num">T</div>
+  <div>
+    <h2>Theory Questions</h2>
+    <div class="sub">Questions 1 – 8 · Exam-Oriented Answers</div>
+  </div>
+</div>
+
+<!-- Q1 -->
+<div class="q-block">
+  <div class="q-title"><span class="q-tag">Q1</span><span>Process & Process Control Block (PCB)</span></div>
+  <div class="q-body">
+    <div class="sh sh2">Definition</div>
+    <div class="def"><strong>Process:</strong> A process is a program in execution. It is an active entity that includes the program code (text section), current activity (program counter, registers), stack, data section, and heap. A process is the unit of work in an OS.</div>
+
+    <div class="sh sh2">Process Control Block (PCB)</div>
+    <div class="def"><strong>PCB (also called Task Control Block):</strong> A data structure maintained by the OS for every process. It stores all information needed to manage and resume a process.</div>
+
+    <div class="sh sh2">Contents of PCB</div>
+    <ul class="ul">
+      <li><strong>Process ID (PID):</strong> Unique identifier assigned to each process.</li>
+      <li><strong>Process State:</strong> Current state — New, Ready, Running, Waiting, Terminated.</li>
+      <li><strong>Program Counter (PC):</strong> Address of the next instruction to execute.</li>
+      <li><strong>CPU Registers:</strong> All register values (accumulators, index registers, stack pointers).</li>
+      <li><strong>CPU Scheduling Information:</strong> Priority, scheduling queue pointers.</li>
+      <li><strong>Memory Management Info:</strong> Base/limit registers, page tables, segment tables.</li>
+      <li><strong>I/O Status Information:</strong> List of I/O devices allocated, open files.</li>
+      <li><strong>Accounting Information:</strong> CPU time used, time limits, job/process numbers.</li>
+    </ul>
+
+    <div class="sh sh2">Purpose of PCB</div>
+    <ul class="ul green">
+      <li>Enables <strong>context switching</strong> — saves and restores process state when CPU switches between processes.</li>
+      <li>Allows the OS to <strong>track and manage all running processes</strong>.</li>
+      <li>Supports <strong>multiprogramming</strong> by maintaining the state of multiple processes simultaneously.</li>
+      <li>Provides all information needed for <strong>scheduling and resource allocation</strong>.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-block">
+  <div class="q-title"><span class="q-tag">Q2</span><span>Kernel and Shell</span></div>
+  <div class="q-body">
+    <div class="two-col">
+      <div>
+        <div class="sh sh2">Kernel</div>
+        <div class="def"><strong>Kernel:</strong> The kernel is the core component of an operating system that has complete control over the system. It acts as a bridge between hardware and user-level software.</div>
+        <ul class="ul">
+          <li>Runs in <strong>privileged (kernel) mode</strong>.</li>
+          <li>Manages CPU scheduling, memory, I/O devices, and file systems.</li>
+          <li>Handles <strong>system calls</strong> from user programs.</li>
+          <li>Directly interacts with hardware via device drivers.</li>
+          <li>Types: Monolithic, Microkernel, Hybrid.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sh sh2">Shell</div>
+        <div class="def"><strong>Shell:</strong> The shell is the user interface to the operating system. It is an interpreter that accepts commands from the user and communicates with the kernel to execute them.</div>
+        <ul class="ul">
+          <li>Runs in <strong>user mode</strong>.</li>
+          <li>Acts as a <strong>command interpreter</strong> between user and kernel.</li>
+          <li>Can be command-line (CLI: bash, sh, zsh) or graphical (GUI).</li>
+          <li>Supports scripting for automation.</li>
+          <li>Examples: Bourne Shell (sh), Bash, C Shell (csh), Korn Shell (ksh).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note note-blue" style="margin-top:8px"><strong>Key Difference:</strong> Kernel is the heart of the OS managing hardware directly; Shell is the face of the OS providing user interaction.</div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="q-block">
+  <div class="q-title"><span class="q-tag">Q3</span><span>UNIX Operating System Architecture</span></div>
+  <div class="q-body">
+    <div class="sh sh2">Layered Architecture (Inside → Outside)</div>
+
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:12px 0;font-family:var(--mono);font-size:12px">
+      <div style="background:rgba(248,81,73,.12);border-bottom:1px solid var(--border);padding:10px 16px;text-align:center;color:#f85149;font-weight:700">LAYER 5 — User Applications / Commands<br><span style="font-size:10px;color:var(--muted)">(vi, ls, grep, compilers, shells, user programs)</span></div>
+      <div style="background:rgba(240,165,0,.10);border-bottom:1px solid var(--border);padding:10px 16px;text-align:center;color:var(--accent);font-weight:700">LAYER 4 — Shell (Command Interpreter)<br><span style="font-size:10px;color:var(--muted)">(sh, bash — interface between user and kernel)</span></div>
+      <div style="background:rgba(88,166,255,.10);border-bottom:1px solid var(--border);padding:10px 16px;text-align:center;color:var(--accent2);font-weight:700">LAYER 3 — Standard Library / System Call Interface<br><span style="font-size:10px;color:var(--muted)">(libc — fork(), exec(), read(), write(), open())</span></div>
+      <div style="background:rgba(63,185,80,.10);border-bottom:1px solid var(--border);padding:10px 16px;text-align:center;color:var(--green);font-weight:700">LAYER 2 — UNIX KERNEL<br><span style="font-size:10px;color:var(--muted)">Process Mgmt · Memory Mgmt · File System · I/O Subsystem · Scheduling</span></div>
+      <div style="background:rgba(188,140,255,.10);padding:10px 16px;text-align:center;color:var(--purple);font-weight:700">LAYER 1 — Hardware (CPU, RAM, Disk, Devices)<br><span style="font-size:10px;color:var(--muted)">(Device drivers in kernel communicate with hardware)</span></div>
+    </div>
+
+    <div class="sh sh2">Kernel Components</div>
+    <ul class="ul">
+      <li><strong>Process Management:</strong> Creation, scheduling, inter-process communication (IPC), synchronization.</li>
+      <li><strong>Memory Management:</strong> Virtual memory, paging, swapping.</li>
+      <li><strong>File System:</strong> Hierarchical file system (/), inodes, VFS (Virtual File System).</li>
+      <li><strong>I/O Subsystem:</strong> Device drivers, buffering, character and block devices.</li>
+      <li><strong>System Call Interface:</strong> Entry point for user programs to request kernel services.</li>
+      <li><strong>Network Subsystem:</strong> TCP/IP stack, sockets.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-block">
+  <div class="q-title"><span class="q-tag">Q4</span><span>System Calls — Concept and Functionality</span></div>
+  <div class="q-body">
+    <div class="def"><strong>System Call:</strong> A system call is a programmatic interface through which a user-level process requests services from the operating system kernel. It is the controlled mechanism to switch from user mode to kernel mode.</div>
+
+    <div class="sh sh2">How System Calls Work</div>
+    <ul class="ul">
+      <li>User program calls a <strong>library function</strong> (e.g., from libc).</li>
+      <li>Library places the <strong>system call number</strong> in a CPU register.</li>
+      <li>A <strong>software interrupt (trap)</strong> is triggered to switch to kernel mode.</li>
+      <li>Kernel executes the <strong>system call handler</strong>.</li>
+      <li>Result is returned to user mode upon completion.</li>
+    </ul>
+
+    <div class="sh sh2">Categories and Functions</div>
+    <ul class="ul green">
+      <li><strong>Process Control:</strong> fork(), exec(), exit(), wait(), getpid()</li>
+      <li><strong>File Management:</strong> open(), read(), write(), close(), unlink()</li>
+      <li><strong>Device Management:</strong> ioctl(), read(), write() on devices</li>
+      <li><strong>Information Maintenance:</strong> getpid(), alarm(), sleep(), time()</li>
+      <li><strong>Communication:</strong> pipe(), socket(), send(), recv()</li>
+    </ul>
+    <div class="note note-blue"><strong>Key Point:</strong> System calls are the only way user programs can access privileged OS services. They ensure protection and controlled access to hardware.</div>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="q-block">
+  <div class="q-title"><span class="q-tag">Q5</span><span>System Calls: fork(), exec(), wait(), exit()</span></div>
+  <div class="q-body">
+
+    <div class="sh sh2">fork()</div>
+    <div class="def"><strong>fork():</strong> Creates a new process (child) that is an exact duplicate of the calling (parent) process. Both processes continue execution from the next statement after fork().</div>
+    <ul class="ul">
+      <li><strong>Return value:</strong> Returns 0 to child; returns child's PID to parent; returns -1 on error.</li>
+      <li>Child inherits parent's code, data, open files, and environment.</li>
+      <li>Parent and child run <strong>concurrently</strong> after fork().</li>
+      <li><strong>Copy-On-Write (COW)</strong> optimization avoids full memory copy until needed.</li>
+    </ul>
+
+    <div class="sh sh2" style="margin-top:12px">exec()</div>
+    <div class="def"><strong>exec():</strong> Replaces the current process image with a new program. The process PID remains the same, but code, data, and stack are replaced. Exists as a family: execl(), execv(), execve(), execlp(), execvp().</div>
+    <ul class="ul">
+      <li>Does <strong>not create a new process</strong> — transforms the existing one.</li>
+      <li>Commonly used after fork() to run a different program in the child.</li>
+      <li><strong>Does not return</strong> on success; returns -1 on failure.</li>
+    </ul>
+
+    <div class="sh sh2" style="margin-top:12px">wait()</div>
+    <div class="def"><strong>wait():</strong> Causes the parent process to suspend execution until one of its child processes terminates. Used to synchronize parent with child.</div>
+    <ul class="ul">
+      <li>Prevents <strong>zombie processes</strong> by collecting child's exit status.</li>
+      <li>Returns the PID of the terminated child.</li>
+      <li>Variants: wait(), waitpid() (waits for specific child).</li>
+    </ul>
+
+    <div class="sh sh2" style="margin-top:12px">exit()</div>
+    <div class="def"><strong>exit():</strong> Terminates the calling process, returning an exit status to the parent. Closes all open file descriptors and releases resources.</div>
+    <ul class="ul">
+      <li>Exit status 0 conventionally indicates <strong>success</strong>; non-zero indicates error.</li>
+      <li>Before termination, calls <strong>atexit() handlers</strong> and flushes stdio buffers.</li>
+      <li>Process becomes a <strong>zombie</strong> until parent calls wait() to collect the status.</li>
+    </ul>
+
+    <div class="formula-box" style="margin-top:12px">
+      // Typical fork-exec-wait pattern<br>
+      pid = fork();<br>
+      if (pid == 0) { exec("new_program"); }  // child<br>
+      else { wait(&status); }                 // parent waits
+    </div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-block">
+  <div class="q-title"><span class="q-tag">Q6</span><span>Multiprogramming</span></div>
+  <div class="q-body">
+    <div class="def"><strong>Multiprogramming:</strong> A technique where multiple programs are loaded into memory simultaneously, and the CPU is switched between them to maximize CPU utilization. When one process waits for I/O, the CPU is given to another process.</div>
+
+    <div class="sh sh2">Key Characteristics</div>
+    <ul class="ul">
+      <li>Multiple processes reside in memory at the same time.</li>
+      <li>CPU is never idle — always executing some process.</li>
+      <li>Relies on the OS scheduler to manage CPU allocation.</li>
+      <li>Does <strong>not</strong> require multiple processors (unlike multiprocessing).</li>
+    </ul>
+
+    <div class="sh sh2">Benefits</div>
+    <ul class="ul green">
+      <li><strong>High CPU Utilization:</strong> CPU is kept busy even when processes wait for I/O.</li>
+      <li><strong>Throughput:</strong> More jobs complete per unit time.</li>
+      <li><strong>Resource Sharing:</strong> Memory, CPU, and I/O devices shared efficiently.</li>
+    </ul>
+    <div class="note note-blue"><strong>Analogy:</strong> Like a chef preparing multiple dishes simultaneously — while one dish simmers, the chef works on another, keeping all burners busy.</div>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="q-block">
+  <div class="q-title"><span class="q-tag">Q7</span><span>CPU Scheduling Algorithm Using Time Slices</span></div>
+  <div class="q-body">
+    <div class="answer-box">
+      <div class="label">✦ ANSWER</div>
+      <strong style="color:var(--accent);font-size:15px">Round Robin (RR)</strong> scheduling algorithm uses time slices.
+    </div>
+    <div class="sh sh2" style="margin-top:12px">Key Points</div>
+    <ul class="ul">
+      <li>Each process is assigned a fixed time unit called a <strong>Time Quantum (Q)</strong> or Time Slice.</li>
+      <li>Processes are served in <strong>FIFO order</strong> from a circular ready queue.</li>
+      <li>If a process does not complete in one quantum, it is <strong>preempted</strong> and placed at the end of the queue.</li>
+      <li>Designed especially for <strong>time-sharing systems</strong>.</li>
+      <li>Performance depends heavily on the value of Q:<br>
+        — Small Q → more context switches, high overhead.<br>
+        — Large Q → degenerates to FCFS.</li>
+      <li>Guarantees <strong>fairness</strong> — no process waits indefinitely.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="q-block">
+  <div class="q-title"><span class="q-tag">Q8</span><span>CPU Scheduling Algorithm Leading to Starvation of Larger Processes</span></div>
+  <div class="q-body">
+    <div class="answer-box">
+      <div class="label">✦ ANSWER</div>
+      <strong style="color:var(--accent);font-size:15px">SJF (Shortest Job First)</strong> — and its preemptive variant <strong style="color:var(--accent)">SRTF (Shortest Remaining Time First)</strong> — may lead to starvation of larger processes.
+    </div>
+    <div class="sh sh2" style="margin-top:12px">Why Starvation Occurs</div>
+    <ul class="ul">
+      <li>SJF always selects the process with the <strong>shortest burst time</strong> next.</li>
+      <li>If short processes keep arriving, a long process may <strong>never get CPU time</strong>.</li>
+      <li>This indefinite waiting is called <strong>starvation</strong>.</li>
+    </ul>
+    <div class="sh sh2">Solution: Aging</div>
+    <ul class="ul green">
+      <li><strong>Aging</strong> is a technique where the priority of a waiting process is gradually increased over time.</li>
+      <li>Eventually, even a long process gets a high enough priority to be scheduled.</li>
+    </ul>
+    <div class="note"><strong>Note:</strong> FCFS never causes starvation (every process eventually runs). Priority Scheduling and SJF are the main algorithms prone to starvation.</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     NUMERICAL QUESTION 1
+════════════════════════════════════════════ -->
+<div class="section-header nu" id="q1">
+  <div class="num">N1</div>
+  <div>
+    <h2>Numerical Q1 — FCFS Scheduling</h2>
+    <div class="sub">Part a: Avg WT (no CS) · Part b: Avg TAT (CS = 1 unit)</div>
+  </div>
+</div>
+
+<div class="q-block">
+  <div class="q-title"><span class="q-tag num">Data</span><span>Process Table</span></div>
+  <div class="q-body">
+    <div class="info-bar">
+      <span class="info-chip">Algorithm: <span>FCFS</span></span>
+      <span class="info-chip">Processes: <span>6</span></span>
+      <span class="info-chip">Context Switch (Part b): <span>1 unit</span></span>
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
+      <tr><td class="td-proc">P1</td><td>0</td><td>3</td></tr>
+      <tr><td class="td-proc">P2</td><td>1</td><td>4</td></tr>
+      <tr><td class="td-proc">P3</td><td>2</td><td>1</td></tr>
+      <tr><td class="td-proc">P4</td><td>3</td><td>2</td></tr>
+      <tr><td class="td-proc">P5</td><td>4</td><td>5</td></tr>
+      <tr><td class="td-proc">P6</td><td>5</td><td>2</td></tr>
+    </table></div>
+
+    <div class="sh">Part a — FCFS Without Context Switching</div>
+    <div style="font-size:13px;margin:8px 0;color:var(--muted)">FCFS executes processes in order of arrival. Since processes arrive in order P1→P2→P3→P4→P5→P6, execution order is the same.</div>
+
+    <div class="gantt-title">Gantt Chart (No CS)</div>
+    <div class="gantt-container">
+      <div class="gantt">
+        <div class="gantt-block gp1" style="width:90px">P1</div>
+        <div class="gantt-block gp2" style="width:120px">P2</div>
+        <div class="gantt-block gp3" style="width:30px">P3</div>
+        <div class="gantt-block gp4" style="width:60px">P4</div>
+        <div class="gantt-block gp5" style="width:150px">P5</div>
+        <div class="gantt-block gp6" style="width:60px">P6</div>
+      </div>
+      <div class="gantt-labels">
+        <div class="gantt-label" style="width:90px">0</div>
+        <div class="gantt-label" style="width:120px">3</div>
+        <div class="gantt-label" style="width:30px">7</div>
+        <div class="gantt-label" style="width:60px">8</div>
+        <div class="gantt-label" style="width:150px">10</div>
+        <div class="gantt-label" style="width:60px">15</div>
+        <div class="gantt-label">17</div>
+      </div>
+    </div>
+
+    <div class="formula-box">Formulas: CT = time process finishes | TAT = CT − AT | WT = TAT − BT</div>
+
+    <div class="tbl-wrap"><table>
+      <tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT = CT−AT</th><th>WT = TAT−BT</th></tr>
+      <tr><td class="td-proc">P1</td><td>0</td><td>3</td><td>3</td><td class="td-tat">3</td><td class="td-wt">0</td></tr>
+      <tr><td class="td-proc">P2</td><td>1</td><td>4</td><td>7</td><td class="td-tat">6</td><td class="td-wt">2</td></tr>
+      <tr><td class="td-proc">P3</td><td>2</td><td>1</td><td>8</td><td class="td-tat">6</td><td class="td-wt">5</td></tr>
+      <tr><td class="td-proc">P4</td><td>3</td><td>2</td><td>10</td><td class="td-tat">7</td><td class="td-wt">5</td></tr>
+      <tr><td class="td-proc">P5</td><td>4</td><td>5</td><td>15</td><td class="td-tat">11</td><td class="td-wt">6</td></tr>
+      <tr><td class="td-proc">P6</td><td>5</td><td>2</td><td>17</td><td class="td-tat">12</td><td class="td-wt">10</td></tr>
+      <tr class="avg-row"><td colspan="4">Total WT</td><td colspan="2">0+2+5+5+6+10 = 28</td></tr>
+    </table></div>
+
+    <div class="final">
+      <div class="label">✦ FINAL ANSWER — Part a</div>
+      <div class="final-grid">
+        <div class="final-item"><div class="fi-label">Average Waiting Time</div><div class="fi-val">28 ÷ 6 = 4.67 units</div></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sh">Part b — FCFS With Context Switching (CS = 1 unit)</div>
+    <div style="font-size:13px;margin:8px 0;color:var(--muted)">A CS of 1 unit is inserted between each consecutive process pair (5 switches total for 6 processes).</div>
+
+    <div class="gantt-title">Gantt Chart (CS = 1 unit per switch)</div>
+    <div class="gantt-container">
+      <div class="gantt">
+        <div class="gantt-block gp1" style="width:90px">P1</div>
+        <div class="gantt-block gcs" style="width:30px">CS</div>
+        <div class="gantt-block gp2" style="width:120px">P2</div>
+        <div class="gantt-block gcs" style="width:30px">CS</div>
+        <div class="gantt-block gp3" style="width:30px">P3</div>
+        <div class="gantt-block gcs" style="width:30px">CS</div>
+        <div class="gantt-block gp4" style="width:60px">P4</div>
+        <div class="gantt-block gcs" style="width:30px">CS</div>
+        <div class="gantt-block gp5" style="width:150px">P5</div>
+        <div class="gantt-block gcs" style="width:30px">CS</div>
+        <div class="gantt-block gp6" style="width:60px">P6</div>
+      </div>
+      <div class="gantt-labels">
+        <div class="gantt-label" style="width:90px">0</div>
+        <div class="gantt-label" style="width:30px">3</div>
+        <div class="gantt-label" style="width:120px">4</div>
+        <div class="gantt-label" style="width:30px">8</div>
+        <div class="gantt-label" style="width:30px">9</div>
+        <div class="gantt-label" style="width:30px">10</div>
+        <div class="gantt-label" style="width:60px">11</div>
+        <div class="gantt-label" style="width:30px">13</div>
+        <div class="gantt-label" style="width:150px">14</div>
+        <div class="gantt-label" style="width:30px">19</div>
+        <div class="gantt-label" style="width:60px">20</div>
+        <div class="gantt-label">22</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:12px"><table>
+      <tr><th>Process</th><th>AT</th><th>BT</th><th>CT (with CS)</th><th>TAT = CT−AT</th><th>WT = TAT−BT</th></tr>
+      <tr><td class="td-proc">P1</td><td>0</td><td>3</td><td>3</td><td class="td-tat">3</td><td class="td-wt">0</td></tr>
+      <tr><td class="td-proc">P2</td><td>1</td><td>4</td><td>8</td><td class="td-tat">7</td><td class="td-wt">3</td></tr>
+      <tr><td class="td-proc">P3</td><td>2</td><td>1</td><td>10</td><td class="td-tat">8</td><td class="td-wt">7</td></tr>
+      <tr><td class="td-proc">P4</td><td>3</td><td>2</td><td>13</td><td class="td-tat">10</td><td class="td-wt">8</td></tr>
+      <tr><td class="td-proc">P5</td><td>4</td><td>5</td><td>19</td><td class="td-tat">15</td><td class="td-wt">10</td></tr>
+      <tr><td class="td-proc">P6</td><td>5</td><td>2</td><td>22</td><td class="td-tat">17</td><td class="td-wt">15</td></tr>
+      <tr class="avg-row"><td colspan="4">Total TAT</td><td colspan="2">3+7+8+10+15+17 = 60</td></tr>
+    </table></div>
+
+    <div class="final">
+      <div class="label">✦ FINAL ANSWER — Part b</div>
+      <div class="final-grid">
+        <div class="final-item"><div class="fi-label">Average TAT (with CS)</div><div class="fi-val">60 ÷ 6 = 10.00 units</div></div>
+        <div class="final-item"><div class="fi-label">Average WT (with CS)</div><div class="fi-val">43 ÷ 6 = 7.17 units</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     NUMERICAL QUESTION 2
+════════════════════════════════════════════ -->
+<div class="section-header nu" id="q2">
+  <div class="num">N2</div>
+  <div>
+    <h2>Numerical Q2 — SRTF & SJF (Non-Preemptive)</h2>
+    <div class="sub">Part a: SRTF · Part b: SJF Non-Preemptive</div>
+  </div>
+</div>
+
+<div class="q-block">
+  <div class="q-title"><span class="q-tag num">Data</span><span>Process Table</span></div>
+  <div class="q-body">
+    <div class="tbl-wrap"><table>
+      <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
+      <tr><td class="td-proc">P1</td><td>0</td><td>8</td></tr>
+      <tr><td class="td-proc">P2</td><td>2</td><td>6</td></tr>
+      <tr><td class="td-proc">P3</td><td>4</td><td>4</td></tr>
+      <tr><td class="td-proc">P4</td><td>5</td><td>2</td></tr>
+      <tr><td class="td-proc">P5</td><td>6</td><td>3</td></tr>
+      <tr><td class="td-proc">P6</td><td>7</td><td>1</td></tr>
+    </table></div>
+  </div>
+</div>
+
+<div class="q-block">
+  <div class="q-title"><span class="q-tag num">Part a</span><span>SRTF — Shortest Remaining Time First (Preemptive SJF)</span></div>
+  <div class="q-body">
+    <div class="sh">SRTF Execution Trace (Step-by-Step)</div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Time</th><th>Event</th><th>Running</th><th>Remaining Times</th><th>Decision</th></tr>
+      <tr><td>0</td><td>P1 arrives</td><td class="td-proc">P1</td><td>P1=8</td><td>Only P1 → run P1</td></tr>
+      <tr><td>2</td><td>P2 arrives (BT=6)</td><td class="td-proc">P1</td><td>P1=6, P2=6</td><td>Tie → continue P1 (already running)</td></tr>
+      <tr><td>4</td><td>P3 arrives (BT=4)</td><td class="td-proc">P1</td><td>P1=4, P2=6, P3=4</td><td>Tie → continue P1</td></tr>
+      <tr><td>5</td><td>P4 arrives (BT=2)</td><td class="td-proc" style="color:var(--red)">P4 !</td><td>P1=3, P4=2</td><td>P4 &lt; P1 → Preempt! Run P4</td></tr>
+      <tr><td>6</td><td>P5 arrives (BT=3)</td><td class="td-proc">P4</td><td>P4=1, P5=3</td><td>P4 &lt; P5 → continue P4</td></tr>
+      <tr><td>7</td><td>P4 finishes; P6 arrives (BT=1)</td><td class="td-proc" style="color:var(--red)">P6 !</td><td>P1=3,P2=6,P3=4,P5=3,P6=1</td><td>Min=P6(1) → run P6</td></tr>
+      <tr><td>8</td><td>P6 finishes</td><td class="td-proc">P1</td><td>P1=3,P2=6,P3=4,P5=3</td><td>Tie P1&P5 → P1 (earlier AT)</td></tr>
+      <tr><td>11</td><td>P1 finishes</td><td class="td-proc">P5</td><td>P2=6,P3=4,P5=3</td><td>Min=P5(3) → run P5</td></tr>
+      <tr><td>14</td><td>P5 finishes</td><td class="td-proc">P3</td><td>P2=6,P3=4</td><td>Min=P3(4) → run P3</td></tr>
+      <tr><td>18</td><td>P3 finishes</td><td class="td-proc">P2</td><td>P2=6</td><td>Only P2 → run P2</td></tr>
+      <tr><td>24</td><td>P2 finishes</td><td>—</td><td>—</td><td>All done</td></tr>
+    </table></div>
+
+    <div class="gantt-title">Gantt Chart — SRTF</div>
+    <div class="gantt-container">
+      <div class="gantt">
+        <div class="gantt-block gp1" style="width:150px">P1</div>
+        <div class="gantt-block gp4" style="width:60px">P4</div>
+        <div class="gantt-block gp6" style="width:30px">P6</div>
+        <div class="gantt-block gp1" style="width:90px">P1</div>
+        <div class="gantt-block gp5" style="width:90px">P5</div>
+        <div class="gantt-block gp3" style="width:120px">P3</div>
+        <div class="gantt-block gp2" style="width:180px">P2</div>
+      </div>
+      <div class="gantt-labels">
+        <div class="gantt-label" style="width:150px">0</div>
+        <div class="gantt-label" style="width:60px">5</div>
+        <div class="gantt-label" style="width:30px">7</div>
+        <div class="gantt-label" style="width:90px">8</div>
+        <div class="gantt-label" style="width:90px">11</div>
+        <div class="gantt-label" style="width:120px">14</div>
+        <div class="gantt-label" style="width:180px">18</div>
+        <div class="gantt-label">24</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:12px"><table>
+      <tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT = CT−AT</th><th>WT = TAT−BT</th></tr>
+      <tr><td class="td-proc">P1</td><td>0</td><td>8</td><td>11</td><td class="td-tat">11</td><td class="td-wt">3</td></tr>
+      <tr><td class="td-proc">P2</td><td>2</td><td>6</td><td>24</td><td class="td-tat">22</td><td class="td-wt">16</td></tr>
+      <tr><td class="td-proc">P3</td><td>4</td><td>4</td><td>18</td><td class="td-tat">14</td><td class="td-wt">10</td></tr>
+      <tr><td class="td-proc">P4</td><td>5</td><td>2</td><td>7</td><td class="td-tat">2</td><td class="td-wt">0</td></tr>
+      <tr><td class="td-proc">P5</td><td>6</td><td>3</td><td>14</td><td class="td-tat">8</td><td class="td-wt">5</td></tr>
+      <tr><td class="td-proc">P6</td><td>7</td><td>1</td><td>8</td><td class="td-tat">1</td><td class="td-wt">0</td></tr>
+      <tr class="avg-row"><td colspan="3">Totals</td><td></td><td>11+22+14+2+8+1 = 58</td><td>3+16+10+0+5+0 = 34</td></tr>
+    </table></div>
+
+    <div class="final">
+      <div class="label">✦ FINAL ANSWERS — SRTF</div>
+      <div class="final-grid">
+        <div class="final-item"><div class="fi-label">Avg Waiting Time (SRTF)</div><div class="fi-val">34 ÷ 6 = 5.67 units</div></div>
+        <div class="final-item"><div class="fi-label">Avg Turnaround Time (SRTF)</div><div class="fi-val">58 ÷ 6 = 9.67 units</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="q-block">
+  <div class="q-title"><span class="q-tag num">Part b</span><span>SJF Non-Preemptive</span></div>
+  <div class="q-body">
+    <div class="sh">SJF Execution Trace</div>
+    <div class="note note-blue"><strong>Key Rule:</strong> In Non-Preemptive SJF, once a process starts, it runs to completion. The scheduler picks the shortest job only when the CPU becomes free.</div>
+
+    <div style="font-size:13px;margin:10px 0">
+      <strong>t=0:</strong> Only P1 available → Run P1 (BT=8). P1 finishes at t=8.<br>
+      <strong>t=8:</strong> All of P2(6), P3(4), P4(2), P5(3), P6(1) have arrived. Sort by BT:<br>
+      <span style="color:var(--accent);font-family:var(--mono)">P6(1) → P4(2) → P5(3) → P3(4) → P2(6)</span>
+    </div>
+
+    <div class="gantt-title">Gantt Chart — SJF Non-Preemptive</div>
+    <div class="gantt-container">
+      <div class="gantt">
+        <div class="gantt-block gp1" style="width:240px">P1 (BT=8)</div>
+        <div class="gantt-block gp6" style="width:30px">P6</div>
+        <div class="gantt-block gp4" style="width:60px">P4</div>
+        <div class="gantt-block gp5" style="width:90px">P5</div>
+        <div class="gantt-block gp3" style="width:120px">P3</div>
+        <div class="gantt-block gp2" style="width:180px">P2</div>
+      </div>
+      <div class="gantt-labels">
+        <div class="gantt-label" style="width:240px">0</div>
+        <div class="gantt-label" style="width:30px">8</div>
+        <div class="gantt-label" style="width:60px">9</div>
+        <div class="gantt-label" style="width:90px">11</div>
+        <div class="gantt-label" style="width:120px">14</div>
+        <div class="gantt-label" style="width:180px">18</div>
+        <div class="gantt-label">24</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:12px"><table>
+      <tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT = CT−AT</th><th>WT = TAT−BT</th></tr>
+      <tr><td class="td-proc">P1</td><td>0</td><td>8</td><td>8</td><td class="td-tat">8</td><td class="td-wt">0</td></tr>
+      <tr><td class="td-proc">P2</td><td>2</td><td>6</td><td>24</td><td class="td-tat">22</td><td class="td-wt">16</td></tr>
+      <tr><td class="td-proc">P3</td><td>4</td><td>4</td><td>18</td><td class="td-tat">14</td><td class="td-wt">10</td></tr>
+      <tr><td class="td-proc">P4</td><td>5</td><td>2</td><td>11</td><td class="td-tat">6</td><td class="td-wt">4</td></tr>
+      <tr><td class="td-proc">P5</td><td>6</td><td>3</td><td>14</td><td class="td-tat">8</td><td class="td-wt">5</td></tr>
+      <tr><td class="td-proc">P6</td><td>7</td><td>1</td><td>9</td><td class="td-tat">2</td><td class="td-wt">1</td></tr>
+      <tr class="avg-row"><td colspan="3">Totals</td><td></td><td>8+22+14+6+8+2 = 60</td><td>0+16+10+4+5+1 = 36</td></tr>
+    </table></div>
+
+    <div class="final">
+      <div class="label">✦ FINAL ANSWERS — SJF Non-Preemptive</div>
+      <div class="final-grid">
+        <div class="final-item"><div class="fi-label">Avg Waiting Time (SJF)</div><div class="fi-val">36 ÷ 6 = 6.00 units</div></div>
+        <div class="final-item"><div class="fi-label">Avg Turnaround Time (SJF)</div><div class="fi-val">60 ÷ 6 = 10.00 units</div></div>
+      </div>
+    </div>
+
+    <div class="answer-box" style="margin-top:12px">
+      <div class="label">📊 SRTF vs SJF Comparison</div>
+      SRTF performs better: Avg WT = <strong>5.67</strong> vs SJF = <strong>6.00</strong> | Avg TAT = <strong>9.67</strong> vs SJF = <strong>10.00</strong>. SRTF's preemption allows shorter jobs to jump ahead, reducing overall wait time.
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     NUMERICAL QUESTION 3
+════════════════════════════════════════════ -->
+<div class="section-header nu" id="q3">
+  <div class="num">N3</div>
+  <div>
+    <h2>Numerical Q3 — Round Robin (TQ=2, CS=1)</h2>
+    <div class="sub">Time Quantum = 2 units · Context Switch = 1 unit</div>
+  </div>
+</div>
+
+<div class="q-block">
+  <div class="q-title"><span class="q-tag num">Data</span><span>Process Table + Parameters</span></div>
+  <div class="q-body">
+    <div class="info-bar">
+      <span class="info-chip">Algorithm: <span>Round Robin</span></span>
+      <span class="info-chip">Time Quantum: <span>2 units</span></span>
+      <span class="info-chip">Context Switch: <span>1 unit</span></span>
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
+      <tr><td class="td-proc">P1</td><td>0</td><td>4</td></tr>
+      <tr><td class="td-proc">P2</td><td>1</td><td>5</td></tr>
+      <tr><td class="td-proc">P3</td><td>2</td><td>2</td></tr>
+      <tr><td class="td-proc">P4</td><td>3</td><td>1</td></tr>
+      <tr><td class="td-proc">P5</td><td>4</td><td>6</td></tr>
+      <tr><td class="td-proc">P6</td><td>5</td><td>3</td></tr>
+    </table></div>
+  </div>
+</div>
+
+<div class="q-block">
+  <div class="q-title"><span class="q-tag num">Solution</span><span>Round Robin Execution Trace</span></div>
+  <div class="q-body">
+    <div class="sh">Ready Queue Simulation</div>
+    <div class="note note-blue"><strong>Convention:</strong> When a quantum expires, newly arrived processes join the queue first, then the preempted process (if remaining > 0) re-enters at the tail. CS = 1 unit is added between every process switch.</div>
+
+    <div class="tbl-wrap" style="margin-top:10px"><table>
+      <tr><th>Time</th><th>Action</th><th>Ready Queue (after action)</th><th>Remaining BT</th></tr>
+      <tr><td>0–2</td><td>P1 runs (2/4)</td><td>[P2, P3, P1]</td><td>P1=2</td></tr>
+      <tr><td>2–3</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P2, P3, P1]</td><td>—</td></tr>
+      <tr><td>3–5</td><td>P2 runs (2/5)</td><td>[P3, P1, P4, P5, P6, P2]</td><td>P2=3</td></tr>
+      <tr><td>5–6</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P3, P1, P4, P5, P6, P2]</td><td>—</td></tr>
+      <tr><td>6–8</td><td>P3 runs (2/2) ✓ <span style="color:var(--green)">P3 done</span></td><td>[P1, P4, P5, P6, P2]</td><td>P3=0</td></tr>
+      <tr><td>8–9</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P1, P4, P5, P6, P2]</td><td>—</td></tr>
+      <tr><td>9–11</td><td>P1 runs (2/2) ✓ <span style="color:var(--green)">P1 done</span></td><td>[P4, P5, P6, P2]</td><td>P1=0</td></tr>
+      <tr><td>11–12</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P4, P5, P6, P2]</td><td>—</td></tr>
+      <tr><td>12–13</td><td>P4 runs (1/1) ✓ <span style="color:var(--green)">P4 done</span></td><td>[P5, P6, P2]</td><td>P4=0</td></tr>
+      <tr><td>13–14</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P5, P6, P2]</td><td>—</td></tr>
+      <tr><td>14–16</td><td>P5 runs (2/6)</td><td>[P6, P2, P5]</td><td>P5=4</td></tr>
+      <tr><td>16–17</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P6, P2, P5]</td><td>—</td></tr>
+      <tr><td>17–19</td><td>P6 runs (2/3)</td><td>[P2, P5, P6]</td><td>P6=1</td></tr>
+      <tr><td>19–20</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P2, P5, P6]</td><td>—</td></tr>
+      <tr><td>20–22</td><td>P2 runs (2/3)</td><td>[P5, P6, P2]</td><td>P2=1</td></tr>
+      <tr><td>22–23</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P5, P6, P2]</td><td>—</td></tr>
+      <tr><td>23–25</td><td>P5 runs (2/4)</td><td>[P6, P2, P5]</td><td>P5=2</td></tr>
+      <tr><td>25–26</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P6, P2, P5]</td><td>—</td></tr>
+      <tr><td>26–27</td><td>P6 runs (1/1) ✓ <span style="color:var(--green)">P6 done</span></td><td>[P2, P5]</td><td>P6=0</td></tr>
+      <tr><td>27–28</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P2, P5]</td><td>—</td></tr>
+      <tr><td>28–29</td><td>P2 runs (1/1) ✓ <span style="color:var(--green)">P2 done</span></td><td>[P5]</td><td>P2=0</td></tr>
+      <tr><td>29–30</td><td class="gcs" style="color:var(--muted)">CS</td><td>[P5]</td><td>—</td></tr>
+      <tr><td>30–32</td><td>P5 runs (2/2) ✓ <span style="color:var(--green)">P5 done</span></td><td>[ ]</td><td>P5=0</td></tr>
+    </table></div>
+
+    <div class="sh" style="margin-top:16px">Gantt Chart — Round Robin (TQ=2, CS=1)</div>
+    <div class="gantt-container">
+      <div class="gantt" style="flex-wrap:wrap;height:auto;min-height:40px">
+        <div class="gantt-block gp1" style="width:60px;height:40px">P1</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp2" style="width:60px;height:40px">P2</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp3" style="width:60px;height:40px">P3✓</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp1" style="width:60px;height:40px">P1✓</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp4" style="width:30px;height:40px">P4✓</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp5" style="width:60px;height:40px">P5</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp6" style="width:60px;height:40px">P6</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp2" style="width:60px;height:40px">P2</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp5" style="width:60px;height:40px">P5</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp6" style="width:30px;height:40px">P6✓</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp2" style="width:30px;height:40px">P2✓</div>
+        <div class="gantt-block gcs" style="width:30px;height:40px">CS</div>
+        <div class="gantt-block gp5" style="width:60px;height:40px">P5✓</div>
+      </div>
+    </div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px">
+      0—2 | CS | 3—5 | CS | 6—8 | CS | 9—11 | CS | 12—13 | CS | 14—16 | CS | 17—19 | CS | 20—22 | CS | 23—25 | CS | 26—27 | CS | 28—29 | CS | 30—32
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:14px"><table>
+      <tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT = CT−AT</th><th>WT = TAT−BT</th></tr>
+      <tr><td class="td-proc">P1</td><td>0</td><td>4</td><td>11</td><td class="td-tat">11</td><td class="td-wt">7</td></tr>
+      <tr><td class="td-proc">P2</td><td>1</td><td>5</td><td>29</td><td class="td-tat">28</td><td class="td-wt">23</td></tr>
+      <tr><td class="td-proc">P3</td><td>2</td><td>2</td><td>8</td><td class="td-tat">6</td><td class="td-wt">4</td></tr>
+      <tr><td class="td-proc">P4</td><td>3</td><td>1</td><td>13</td><td class="td-tat">10</td><td class="td-wt">9</td></tr>
+      <tr><td class="td-proc">P5</td><td>4</td><td>6</td><td>32</td><td class="td-tat">28</td><td class="td-wt">22</td></tr>
+      <tr><td class="td-proc">P6</td><td>5</td><td>3</td><td>27</td><td class="td-tat">22</td><td class="td-wt">19</td></tr>
+      <tr class="avg-row"><td colspan="3">Totals</td><td></td><td>11+28+6+10+28+22 = 105</td><td>7+23+4+9+22+19 = 84</td></tr>
+    </table></div>
+
+    <div class="final">
+      <div class="label">✦ FINAL ANSWERS — Round Robin (TQ=2, CS=1)</div>
+      <div class="final-grid">
+        <div class="final-item"><div class="fi-label">Average Waiting Time</div><div class="fi-val">84 ÷ 6 = 14.00 units</div></div>
+        <div class="final-item"><div class="fi-label">Average Turnaround Time</div><div class="fi-val">105 ÷ 6 = 17.50 units</div></div>
+        <div class="final-item"><div class="fi-label">Total Context Switches</div><div class="fi-val">11 switches</div></div>
+        <div class="final-item"><div class="fi-label">Total CS Overhead</div><div class="fi-val">11 units wasted</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     NUMERICAL QUESTION 4
+════════════════════════════════════════════ -->
+<div class="section-header nu" id="q4">
+  <div class="num">N4</div>
+  <div>
+    <h2>Numerical Q4 — SRTF with I/O Phases</h2>
+    <div class="sub">% CPU Idle Time · I/O overlapping · First 20% I/O → 70% CPU → Last 10% I/O</div>
+  </div>
+</div>
+
+<div class="q-block">
+  <div class="q-title"><span class="q-tag num">Setup</span><span>Process Phase Breakdown</span></div>
+  <div class="q-body">
+    <div class="info-bar">
+      <span class="info-chip">Algorithm: <span>SRTF</span></span>
+      <span class="info-chip">I/O can overlap: <span>Yes</span></span>
+      <span class="info-chip">Phase order: <span>I/O → CPU → I/O</span></span>
+    </div>
+
+    <div class="formula-box">
+      Initial I/O = 20% of total | CPU Burst = 70% of total | Final I/O = 10% of total
+    </div>
+
+    <div class="tbl-wrap"><table>
+      <tr><th>Process</th><th>AT</th><th>Total Time</th><th>Init I/O (20%)</th><th>CPU Burst (70%)</th><th>Final I/O (10%)</th></tr>
+      <tr><td class="td-proc">P1</td><td>0</td><td>10</td><td>2</td><td class="td-hi">7</td><td>1</td></tr>
+      <tr><td class="td-proc">P2</td><td>1</td><td>20</td><td>4</td><td class="td-hi">14</td><td>2</td></tr>
+      <tr><td class="td-proc">P3</td><td>2</td><td>30</td><td>6</td><td class="td-hi">21</td><td>3</td></tr>
+      <tr><td class="td-proc">P4</td><td>3</td><td>40</td><td>8</td><td class="td-hi">28</td><td>4</td></tr>
+    </table></div>
+
+    <div class="sh" style="margin-top:12px">Key Observations</div>
+    <ul class="ul">
+      <li>Every process begins with I/O — so all processes do initial I/O before needing the CPU.</li>
+      <li>Initial I/O completion times: P1 finishes I/O at t=2, P2 at t=5, P3 at t=8, P4 at t=11.</li>
+      <li>All I/O operations (including final I/O) run in parallel — CPU and I/O overlap freely.</li>
+      <li>SRTF scheduling applies only when processes compete for the CPU.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="q-block">
+  <div class="q-title"><span class="q-tag num">Solution</span><span>SRTF Execution Trace with I/O</span></div>
+  <div class="q-body">
+    <div class="sh">Phase 1: Initial I/O (All processes doing I/O simultaneously)</div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Time</th><th>CPU State</th><th>Event / Reason</th></tr>
+      <tr><td>0–2</td><td class="gcs" style="color:#555">IDLE</td><td>P1 doing init I/O. P2/P3/P4 not yet arrived or in I/O.</td></tr>
+      <tr><td>2</td><td>—</td><td style="color:var(--green)">P1 init I/O done! P1 ready for CPU (burst=7). Only P1 available → CPU assigned.</td></tr>
+      <tr><td>2–9</td><td class="td-proc">P1 on CPU</td><td>P2 I/O done at t=5 (rem=14 &gt; P1 rem=4 → no preempt). P3 I/O done at t=8 (rem=21 &gt; P1 rem=1 → no preempt). P4 I/O done at t=11 (not yet).</td></tr>
+    </table></div>
+
+    <div class="sh">Step-by-Step CPU Schedule (SRTF)</div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Time Interval</th><th>CPU Runs</th><th>SRTF Check at Start</th><th>Notes</th></tr>
+      <tr><td>0 – 2</td><td class="gidle" style="color:#555">IDLE</td><td>No process ready for CPU</td><td>P1 in init I/O</td></tr>
+      <tr><td>2 – 9</td><td class="td-proc">P1</td><td>Only P1 (CPU=7) ready at t=2</td><td>P2(rem=14)@t=5, P3(rem=21)@t=8 arrive but P1 has shorter remaining. No preemption.</td></tr>
+      <tr><td>9</td><td>—</td><td>—</td><td style="color:var(--green)">P1 CPU done! P1 starts final I/O (1 unit, done at t=10). P1 complete at t=10.</td></tr>
+      <tr><td>9 – 23</td><td class="td-proc">P2</td><td>P2(14) &lt; P3(21) at t=9. P4(28) arrives @t=11 — P2 still shortest.</td><td>P2 runs full 14 units without preemption. P2 done at t=23.</td></tr>
+      <tr><td>23</td><td>—</td><td>—</td><td style="color:var(--green)">P2 CPU done. P2 final I/O (2 units, done at t=25). P2 complete at t=25.</td></tr>
+      <tr><td>23 – 44</td><td class="td-proc">P3</td><td>P3(21) &lt; P4(28) at t=23. No new arrivals.</td><td>P3 runs 21 units. Done at t=44.</td></tr>
+      <tr><td>44</td><td>—</td><td>—</td><td style="color:var(--green)">P3 CPU done. P3 final I/O (3 units, done at t=47). P3 complete at t=47.</td></tr>
+      <tr><td>44 – 72</td><td class="td-proc">P4</td><td>Only P4(28) remaining.</td><td>P4 runs 28 units. Done at t=72.</td></tr>
+      <tr><td>72 – 76</td><td class="gidle" style="color:#555">IDLE</td><td>P4 doing final I/O (4 units)</td><td>No other process. P4 complete at t=76. Simulation ends.</td></tr>
+    </table></div>
+
+    <div class="sh" style="margin-top:14px">CPU Timeline Summary</div>
+    <div class="gantt-container">
+      <div class="gantt" style="min-width:700px">
+        <div class="gantt-block gidle" style="width:40px;font-size:10px">IDLE</div>
+        <div class="gantt-block gp1" style="width:140px">P1 (CPU)</div>
+        <div class="gantt-block gp2" style="width:280px">P2 (CPU)</div>
+        <div class="gantt-block gp3" style="width:420px">P3 (CPU)</div>
+        <div class="gantt-block gp4" style="width:min(560px,100%)">P4 (CPU)</div>
+        <div class="gantt-block gidle" style="width:80px;font-size:10px">IDLE</div>
+      </div>
+      <div class="gantt-labels" style="min-width:700px">
+        <div class="gantt-label" style="width:40px">0</div>
+        <div class="gantt-label" style="width:140px">2</div>
+        <div class="gantt-label" style="width:280px">9</div>
+        <div class="gantt-label" style="width:420px">23</div>
+        <div class="gantt-label" style="width:min(560px,100%)">44</div>
+        <div class="gantt-label" style="width:80px">72</div>
+        <div class="gantt-label">76</div>
+      </div>
+    </div>
+
+    <div class="sh" style="margin-top:14px">CPU Idle Time Calculation</div>
+    <div class="formula-box">
+      CPU Idle Periods:<br>
+      &nbsp;&nbsp;Period 1: t = 0 to t = 2 → 2 units (no process ready)<br>
+      &nbsp;&nbsp;Period 2: t = 72 to t = 76 → 4 units (P4 doing final I/O, all others done)<br><br>
+      Total CPU Idle Time = 2 + 4 = 6 units<br>
+      Total Simulation Time = 76 units (P4 final I/O ends at t=76)<br>
+      CPU Active Time = 7 + 14 + 21 + 28 = 70 units ✓ (70 + 6 = 76 ✓)<br><br>
+      % CPU Idle = (6 / 76) × 100 = 7.89%
+    </div>
+
+    <div class="tbl-wrap"><table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>Total Simulation Time</td><td class="td-tat">76 units</td></tr>
+      <tr><td>CPU Active Time</td><td class="td-hi">70 units</td></tr>
+      <tr><td>CPU Idle Time (t=0 to 2)</td><td class="td-wt">2 units</td></tr>
+      <tr><td>CPU Idle Time (t=72 to 76)</td><td class="td-wt">4 units</td></tr>
+      <tr><td>Total CPU Idle Time</td><td class="td-wt">6 units</td></tr>
+      <tr class="avg-row"><td>% CPU Idle</td><td>(6/76) × 100 = 7.89%</td></tr>
+    </table></div>
+
+    <div class="final">
+      <div class="label">✦ FINAL ANSWER — % CPU Idle Time</div>
+      <div class="final-grid">
+        <div class="final-item"><div class="fi-label">CPU Idle Time</div><div class="fi-val">6 units</div></div>
+        <div class="final-item"><div class="fi-label">Total Time</div><div class="fi-val">76 units</div></div>
+        <div class="final-item"><div class="fi-label">% CPU Idle</div><div class="fi-val">≈ 7.89%</div></div>
+        <div class="final-item"><div class="fi-label">% CPU Busy</div><div class="fi-val">≈ 92.11%</div></div>
+      </div>
+    </div>
+
+    <div class="note note-blue" style="margin-top:12px">
+      <strong>Why CPU is barely idle:</strong> I/O overlap is the key. While each process does its initial I/O, the previous process is already on CPU. The 7-unit initial idle (0→2) and 4-unit final idle (72→76) are unavoidable — at the start no process is CPU-ready, and at the end all work is done except P4's final I/O.
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<div style="margin:50px 0 20px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted)">
+  OS Class Test Solutions — All answers verified step-by-step · B.Tech CSE 4th Sem
+  <div style="margin-top:6px;color:#444">FCFS · SJF · SRTF · Round Robin · Process Management · UNIX Architecture</div>
+</div>
+
+</div><!-- end .container -->
+</body>
+</html>
